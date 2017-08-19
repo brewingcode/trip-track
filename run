@@ -2,18 +2,69 @@
 
 moment = require 'moment'
 pr = require 'bluebird'
+fs = pr.promisifyAll require 'fs'
+mkdirp = require 'mkdirp'
+cheerio = require 'cheerio'
+pug = require 'pug'
 
-client = require('@google/maps').createClient
-  key: process.env.GOOGLE_MAPS_API_KEY
+gapi = null
+{ log } = log: -> 0
 
-travelTime = (start, end) ->
-  pr.promisify(client.directions)
+travelTime = ([start, end]) ->
+  now = moment().unix()
+  pr.promisify(gapi.directions)
     origin: start
     destination: end
     mode: 'driving'
-    departure_time: moment().unix()
+    departure_time: now
   .then (response) ->
-    # returns a {text:15432, text:"4 hours 17 mins"}
-    response.json.routes[0].legs[0].duration_in_traffic
+    # returns a {value:15432, text:"4 hours 17 mins"}
+    t = response.json.routes[0].legs[0].duration_in_traffic
+    dir = "#{__dirname}/data/#{start}--#{end}"
+    mkdirp.sync dir
+    fs.writeFileAsync "#{dir}/#{now}.json", JSON.stringify t
 
-travelTime('seattle, wa', 'stayton, or').then console.log
+fs.readFileAsync("#{__dirname}/api-key", 'utf8').then (contents) ->
+  [ _, apiKey ] = contents.match /GOOGLE_MAPS_API_KEY=(\S+)/
+  gapi = require('@google/maps').createClient key: apiKey
+.then ->
+  pr.each [
+    []
+  ], travelTime
+.then ->
+  $ = cheerio.load pug.render fs.readFileSync("#{__dirname}/index.pug", 'utf8'),
+    bootstrap: fs.readFileSync "#{__dirname}/bootstrap.min.css"
+
+  fs.readdirSync("#{__dirname}/data").forEach (dir) ->
+    [ _, start, end ] = dir.match /^(.*)--(.*)$/
+    id = dir.replace /\W/g, ''
+    log 'route:', id, start, end
+    route = $('#main').append $ pug.render """
+      .route(id=id)
+        h3 \#{start} to \#{end}
+        .graph
+        table.table.table-striped
+          thead
+            tr
+              th Time of day
+              th Duration
+          tbody
+    """, { id, start, end }
+
+    files = fs.readdirSync "#{__dirname}/data/#{dir}"
+    files.sort()
+    files.forEach (file) ->
+      [ _, unixTime ] = file.match /(\d+)/
+      t = JSON.parse fs.readFileSync "#{__dirname}/data/#{dir}/#{file}", 'utf8'
+      log 'point:', unixTime, t
+      $('tbody', route).append pug.render """
+        tr
+          td \#{time}
+          td \#{duration}
+      """,
+        time: moment(1000*parseInt(unixTime)).format('ddd h:mmA')
+        duration: t.text
+
+  mkdirp.sync "#{__dirname}/dist"
+  fs.writeFileSync "#{__dirname}/dist/index.html", $.html()
+
