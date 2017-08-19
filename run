@@ -1,7 +1,7 @@
 #!/usr/bin/env coffee
 
 client = require('@google/maps').createClient
-  key: process.env.GAPI_KEY
+  key: process.env.GOOGLE_MAPS_API_KEY
 
 # Geocode an address.
 client.geocode
