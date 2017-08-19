@@ -1,0 +1,13 @@
+#!/usr/bin/env coffee
+
+client = require('@google/maps').createClient
+  key: process.env.GAPI_KEY
+
+# Geocode an address.
+client.geocode
+  address: '1600 Amphitheatre Parkway, Mountain View, CA'
+, (err, response) ->
+  if err
+    console.error 'geocode error:', err
+  else
+    console.log response.json.results
