@@ -11,6 +11,8 @@
   "license": "ISC",
   "dependencies": {
     "@google/maps": "^0.4.3",
-    "coffee-script": "^1.12.7"
+    "bluebird": "^3.5.0",
+    "coffee-script": "^1.12.7",
+    "moment": "^2.18.1"
   }
 }
