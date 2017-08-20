@@ -41,7 +41,13 @@ fs.readFileAsync("#{__dirname}/api-key", 'utf8').then (contents) ->
     log 'route:', id, start, end
     route = $('#main').append $ pug.render """
       .route(id=id)
-        h3 \#{start} to \#{end}
+        h3
+          code= start
+          span
+            |
+            | to
+            |
+          code= end
         .graph
         table.table.table-striped
           thead
@@ -67,4 +73,3 @@ fs.readFileAsync("#{__dirname}/api-key", 'utf8').then (contents) ->
 
   mkdirp.sync "#{__dirname}/dist"
   fs.writeFileSync "#{__dirname}/dist/index.html", $.html()
-
