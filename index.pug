@@ -6,12 +6,21 @@ html
     meta(name="viewport" content="width=device-width, initial-scale=1")
     title Trip Track
     style !{bootstrap}
-    style.
-      td { margin-right: 2ex; }
   body
-    #main.container-fluid.col-lg-6
+    #main.container-fluid
+      ul
+        each r in routes
+          li
+            a(href='#'+r.id)
+              code= r.start
+              span
+                |
+                | to
+                |
+              code= r.end
+
       each r in routes
-        .route(id=r.id)
+        .route(id=r.id).col-log-4
           h3
             code= r.start
             span
