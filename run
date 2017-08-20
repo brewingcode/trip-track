@@ -50,7 +50,7 @@ fs.readFileAsync("#{__dirname}/api-key", 'utf8').then (contents) ->
             |
           code= end
         .graph
-        table.table.table-striped
+        table.table.table-striped.table-condensed
           thead
             tr
               th Time of day
