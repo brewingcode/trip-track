@@ -42,7 +42,7 @@ fs.readFileAsync("#{__dirname}/api-key", 'utf8').then (contents) ->
     [ _, start, end ] = dir.match /^(.*)--(.*)$/
     id = dir.replace /\W/g, ''
     log 'route:', id, start, end
-    route = $('#main').append $ pug.render """
+    route = $ pug.render """
       .route(id=id)
         h3
           code= start
@@ -66,13 +66,15 @@ fs.readFileAsync("#{__dirname}/api-key", 'utf8').then (contents) ->
       [ _, unixTime ] = file.match /(\d+)/
       t = JSON.parse fs.readFileSync "#{__dirname}/data/#{dir}/#{file}", 'utf8'
       log 'point:', unixTime, t
-      $("\##{id} tbody").append pug.render """
+      $('tbody', route).append pug.render """
         tr
           td \#{time}
           td \#{duration}
       """,
         time: moment(1000*parseInt(unixTime)).format('ddd h:mmA')
         duration: t.text
+
+    $('#main').append(route)
 
   mkdirp.sync "#{__dirname}/dist"
   fs.writeFileSync "#{__dirname}/dist/index.html", $.html()
