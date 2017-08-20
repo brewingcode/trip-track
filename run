@@ -64,7 +64,7 @@ fs.readFileAsync("#{__dirname}/api-key", 'utf8').then (contents) ->
       [ _, unixTime ] = file.match /(\d+)/
       t = JSON.parse fs.readFileSync "#{__dirname}/data/#{dir}/#{file}", 'utf8'
       log 'point:', unixTime, t
-      $('tbody', route).append pug.render """
+      $("\##{id} tbody").append pug.render """
         tr
           td \#{time}
           td \#{duration}
