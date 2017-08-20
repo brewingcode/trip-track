@@ -30,6 +30,7 @@ fs.readFileAsync("#{__dirname}/api-key", 'utf8').then (contents) ->
 .then ->
   pr.each [
     []
+    []
   ], travelTime
 .then ->
   $ = cheerio.load pug.render fs.readFileSync("#{__dirname}/index.pug", 'utf8'),
