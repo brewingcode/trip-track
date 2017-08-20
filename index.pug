@@ -7,35 +7,35 @@ html
     title Trip Track
     style !{bootstrap}
   body
-    #main.container-fluid
-      ul
-        each r in routes
-          li
-            a(href='#'+r.id)
-              code= r.start
-              span
-                |
-                | to
-                |
-              code= r.end
+    mixin routeName(r)
+      code= r.start
+      span
+        |
+        | to
+        |
+      code= r.end
 
-      each r in routes
-        .route(id=r.id).col-log-4
-          h3
-            code= r.start
-            span
-              |
-              | to
-              |
-            code= r.end
-          .graph
-          table.table.table-striped.table-condensed
-            thead
-              tr
-                th Time of day
-                th Duration
-            tbody
-              each t in r.times
+    #main.container-fluid
+      .row
+        ul
+          each r in routes
+            li
+              a(href='#'+r.id)
+                +routeName(r)
+
+      .row
+        each r in routes
+          .route(id=r.id).col-lg-3.col-sm-6
+            h3
+              +routeName(r)
+            .graph
+            table.table.table-striped.table-condensed
+              thead
                 tr
-                  td #{t.time}
-                  td #{t.duration}
+                  th Time of day
+                  th Duration
+              tbody
+                each t in r.times
+                  tr
+                    td #{t.time}
+                    td #{t.duration}
