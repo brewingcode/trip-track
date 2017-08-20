@@ -10,3 +10,23 @@ html
       td { margin-right: 2ex; }
   body
     #main.container-fluid.col-lg-6
+      each r in routes
+        .route(id=r.id)
+          h3
+            code= r.start
+            span
+              |
+              | to
+              |
+            code= r.end
+          .graph
+          table.table.table-striped.table-condensed
+            thead
+              tr
+                th Time of day
+                th Duration
+            tbody
+              each t in r.times
+                tr
+                  td #{t.time}
+                  td #{t.duration}

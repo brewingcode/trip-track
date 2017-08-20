@@ -35,30 +35,13 @@ fs.readFileAsync("#{__dirname}/api-key", 'utf8').then (contents) ->
     []
   ], travelTime
 .then ->
-  $ = cheerio.load pug.render fs.readFileSync("#{__dirname}/index.pug", 'utf8'),
-    bootstrap: fs.readFileSync "#{__dirname}/bootstrap.min.css"
+  routes = []
 
   fs.readdirSync("#{__dirname}/data").forEach (dir) ->
     [ _, start, end ] = dir.match /^(.*)--(.*)$/
     id = dir.replace /\W/g, ''
     log 'route:', id, start, end
-    route = $ pug.render """
-      .route(id=id)
-        h3
-          code= start
-          span
-            |
-            | to
-            |
-          code= end
-        .graph
-        table.table.table-striped.table-condensed
-          thead
-            tr
-              th Time of day
-              th Duration
-          tbody
-    """, { id, start, end }
+    route = { start, end, id, times:[] }
 
     files = fs.readdirSync "#{__dirname}/data/#{dir}"
     files.sort()
@@ -66,15 +49,14 @@ fs.readFileAsync("#{__dirname}/api-key", 'utf8').then (contents) ->
       [ _, unixTime ] = file.match /(\d+)/
       t = JSON.parse fs.readFileSync "#{__dirname}/data/#{dir}/#{file}", 'utf8'
       log 'point:', unixTime, t
-      $('tbody', route).append pug.render """
-        tr
-          td \#{time}
-          td \#{duration}
-      """,
+      route.times.push
         time: moment(1000*parseInt(unixTime)).format('ddd h:mma')
         duration: t.text
 
-    $('#main').append(route)
+    routes.push route
 
+  html = pug.render fs.readFileSync("#{__dirname}/index.pug", 'utf8'),
+    bootstrap: fs.readFileSync "#{__dirname}/bootstrap.min.css"
+    routes: routes
   mkdirp.sync "#{__dirname}/dist"
-  fs.writeFileSync "#{__dirname}/dist/index.html", $.html()
+  fs.writeFileSync "#{__dirname}/dist/index.html", html
