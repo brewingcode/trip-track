@@ -71,7 +71,7 @@ fs.readFileAsync("#{__dirname}/api-key", 'utf8').then (contents) ->
           td \#{time}
           td \#{duration}
       """,
-        time: moment(1000*parseInt(unixTime)).format('ddd h:mmA')
+        time: moment(1000*parseInt(unixTime)).format('ddd h:mma')
         duration: t.text
 
     $('#main').append(route)
