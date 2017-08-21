@@ -61,6 +61,7 @@ fs.readFileAsync("#{__dirname}/api-key", 'utf8').then (contents) ->
   html = pug.render fs.readFileSync("#{__dirname}/index.pug", 'utf8'),
     bootstrap: fs.readFileSync "#{__dirname}/bootstrap.min.css"
     chartJs: fs.readFileSync "#{__dirname}/Chart.bundle.min.js"
+    momentJs: fs.readFileSync "#{__dirname}/node_modules/moment/min/moment.min.js"
     routes: routes
   mkdirp.sync "#{__dirname}/dist"
   fs.writeFileSync "#{__dirname}/dist/index.html", html

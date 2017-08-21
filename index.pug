@@ -7,6 +7,7 @@ html
     title Trip Track
     style !{bootstrap}
     script !{chartJs}
+    script !{momentJs}
   body
     mixin routeName(r)
       code= r.start
@@ -32,12 +33,13 @@ html
               canvas(id=r.id)
               script.
                 var ctx = document.getElementById("#{r.id}").getContext('2d');
+                var r = !{JSON.stringify(r, null, '  ')};
                 var myChart = new Chart(ctx, {
                   type: 'line',
                   data: {
-                    labels: !{JSON.stringify(r.labels)},
+                    labels: r.labels,
                     datasets: [{
-                      data: !{JSON.stringify(r.data)}
+                      data: r.data
                     }],
                   },
                   options: {
@@ -45,6 +47,17 @@ html
                     legend: false,
                     scales: {
                       yAxes: [{
+                        ticks: {
+                          callback: function(v) {
+                            var m = moment.duration(v, 'seconds');
+                            var s = '';
+                            if (m.hours() > 0) {
+                              s += m.hours() + 'h ';
+                            }
+                            s += m.minutes() + 'm';
+                            return s;
+                          }
+                        }
                       }],
                       xAxes: [{
                         gridLines: {
