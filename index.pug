@@ -45,10 +45,12 @@ html
                     legend: false,
                     scales: {
                       yAxes: [{
-                        //display: true
                       }],
                       xAxes: [{
-                        //display: true,
+                        gridLines: {
+                          offsetGridLines: false
+                        },
+                        offset: true,
                         type: 'time',
                         time: {
                           parser: "x"
