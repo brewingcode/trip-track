@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "coffee -w ./run"
+    "start": "coffee -w ./run",
+    "build": "./run"
   },
   "keywords": [],
   "author": "",
