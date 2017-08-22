@@ -12,6 +12,9 @@ gapi = null
 routes = [
 ]
 
+fr = (filename) ->
+  fs.readFileSync "#{__dirname}/#{filename}", 'utf8'
+
 travelTime = ([start, end]) ->
   now = moment().unix()
   pr.promisify(gapi.directions)
@@ -46,7 +49,7 @@ fs.readFileAsync("#{__dirname}/api-key", 'utf8').then (contents) ->
     files.forEach (file) ->
       [ _, unixTime ] = file.match /(\d+)/
       if unixTime >= cutoff
-        json = JSON.parse fs.readFileSync "#{__dirname}/data/#{dir}/#{file}", 'utf8'
+        json = JSON.parse fr "data/#{dir}/#{file}"
         if json.routes
           t = json.routes[0].legs[0].duration_in_traffic
         else
@@ -60,10 +63,10 @@ fs.readFileAsync("#{__dirname}/api-key", 'utf8').then (contents) ->
 
     routeData.push route
 
-  html = pug.render fs.readFileSync("#{__dirname}/index.pug", 'utf8'),
-    bootstrap: fs.readFileSync "#{__dirname}/bootstrap.min.css"
-    chartJs: fs.readFileSync "#{__dirname}/Chart.bundle.min.js"
-    momentJs: fs.readFileSync "#{__dirname}/node_modules/moment/min/moment.min.js"
+  html = pug.render fr('index.pug'),
+    bootstrap: fr 'bootstrap.min.css'
+    chartJs: fr 'Chart.bundle.min.js'
+    momentJs: fr 'node_modules/moment/min/moment.min.js'
     routes: routeData
   mkdirp.sync "#{__dirname}/dist"
   fs.writeFileSync "#{__dirname}/dist/index.html", html
