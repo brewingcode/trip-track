@@ -1,5 +1,3 @@
-#!/usr/bin/env coffee
-
 moment = require 'moment'
 pr = require 'bluebird'
 fs = pr.promisifyAll require 'fs'
@@ -7,6 +5,7 @@ mkdirp = require 'mkdirp'
 pug = require 'pug'
 coffeescript = require 'coffee-script'
 uglify = require 'uglify-js'
+argv = require('yargs').argv
 
 gapi = null
 { log } = log: -> 0
@@ -18,6 +17,7 @@ fr = (filename) ->
   fs.readFileSync "#{__dirname}/#{filename}", 'utf8'
 
 travelTime = ([start, end]) ->
+  return if argv.offline
   now = moment().unix()
   pr.promisify(gapi.directions)
     origin: start
