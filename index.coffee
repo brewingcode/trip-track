@@ -70,6 +70,6 @@ fs.readFileAsync("#{__dirname}/api-key", 'utf8').then (contents) ->
     chartJs: fr 'Chart.bundle.min.js'
     momentJs: fr 'node_modules/moment/min/moment.min.js'
     routes: routeData
-    myJs: uglify.minify(coffeescript.compile fr('my.coffee'), bare:true).code
+    myJs: uglify.minify(coffeescript.compile fr('client.coffee'), bare:true).code
   mkdirp.sync "#{__dirname}/dist"
   fs.writeFileSync "#{__dirname}/dist/index.html", html
