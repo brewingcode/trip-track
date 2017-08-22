@@ -8,6 +8,16 @@ html
     style !{bootstrap}
     script !{chartJs}
     script !{momentJs}
+    script.
+      function secondsToString(v) {
+        var m = moment.duration(v, 'seconds');
+        var s = '';
+        if (m.hours() > 0) {
+          s += m.hours() + 'h ';
+        }
+        s += m.minutes() + 'm';
+        return s;
+      }
   body
     mixin routeName(r)
       code= r.start
@@ -45,17 +55,18 @@ html
                   options: {
                     responsive: true,
                     legend: false,
+                    tooltips: {
+                      callbacks: {
+                        label: function(tip) {
+                          return secondsToString(tip.yLabel);
+                        }
+                      }
+                    },
                     scales: {
                       yAxes: [{
                         ticks: {
                           callback: function(v) {
-                            var m = moment.duration(v, 'seconds');
-                            var s = '';
-                            if (m.hours() > 0) {
-                              s += m.hours() + 'h ';
-                            }
-                            s += m.minutes() + 'm';
-                            return s;
+                            return secondsToString(v);
                           }
                         }
                       }],
@@ -66,7 +77,8 @@ html
                         offset: true,
                         type: 'time',
                         time: {
-                          parser: "x"
+                          parser: "x",
+                          tooltipFormat: "ddd h:mma"
                         }
                       }]
                     }
