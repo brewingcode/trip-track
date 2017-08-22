@@ -9,6 +9,9 @@ pug = require 'pug'
 gapi = null
 { log } = log: -> 0
 
+routes = [
+]
+
 travelTime = ([start, end]) ->
   now = moment().unix()
   pr.promisify(gapi.directions)
@@ -18,7 +21,7 @@ travelTime = ([start, end]) ->
     departure_time: now
   .then (response) ->
     # returns a {value:15432, text:"4 hours 17 mins"}
-    t = response.json.routes[0].legs[0].duration_in_traffic
+    t = response.json
     dir = "#{__dirname}/data/#{start}--#{end}"
     mkdirp.sync dir
     fs.writeFileAsync "#{dir}/#{now}.json", JSON.stringify t
@@ -27,17 +30,12 @@ fs.readFileAsync("#{__dirname}/api-key", 'utf8').then (contents) ->
   [ _, apiKey ] = contents.match /GOOGLE_MAPS_API_KEY=(\S+)/
   gapi = require('@google/maps').createClient key: apiKey
 .then ->
-  pr.each [
-    []
-    []
-    []
-    []
-  ], travelTime
+  pr.each routes, travelTime
 .then ->
-  routes = []
+  routeData = []
 
-  fs.readdirSync("#{__dirname}/data").forEach (dir) ->
-    [ _, start, end ] = dir.match /^(.*)--(.*)$/
+  routes.forEach ([start, end]) ->
+    dir = "#{start}--#{end}"
     id = dir.replace /\W/g, ''
     log 'route:', id, start, end
     route = { start, end, id, times:[], labels:[], data:[] }
@@ -48,7 +46,11 @@ fs.readFileAsync("#{__dirname}/api-key", 'utf8').then (contents) ->
     files.forEach (file) ->
       [ _, unixTime ] = file.match /(\d+)/
       if unixTime >= cutoff
-        t = JSON.parse fs.readFileSync "#{__dirname}/data/#{dir}/#{file}", 'utf8'
+        json = JSON.parse fs.readFileSync "#{__dirname}/data/#{dir}/#{file}", 'utf8'
+        if json.routes
+          t = json.routes[0].legs[0].duration_in_traffic
+        else
+          t = json
         log 'point:', unixTime, t
         route.times.push
           time: moment(1000*parseInt(unixTime)).format('ddd h:mma')
@@ -56,12 +58,12 @@ fs.readFileAsync("#{__dirname}/api-key", 'utf8').then (contents) ->
         route.labels.push 1000*unixTime
         route.data.push t.value
 
-    routes.push route
+    routeData.push route
 
   html = pug.render fs.readFileSync("#{__dirname}/index.pug", 'utf8'),
     bootstrap: fs.readFileSync "#{__dirname}/bootstrap.min.css"
     chartJs: fs.readFileSync "#{__dirname}/Chart.bundle.min.js"
     momentJs: fs.readFileSync "#{__dirname}/node_modules/moment/min/moment.min.js"
-    routes: routes
+    routes: routeData
   mkdirp.sync "#{__dirname}/dist"
   fs.writeFileSync "#{__dirname}/dist/index.html", html
