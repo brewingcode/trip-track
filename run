@@ -5,6 +5,8 @@ pr = require 'bluebird'
 fs = pr.promisifyAll require 'fs'
 mkdirp = require 'mkdirp'
 pug = require 'pug'
+coffeescript = require 'coffee-script'
+uglify = require 'uglify-js'
 
 gapi = null
 { log } = log: -> 0
@@ -68,5 +70,6 @@ fs.readFileAsync("#{__dirname}/api-key", 'utf8').then (contents) ->
     chartJs: fr 'Chart.bundle.min.js'
     momentJs: fr 'node_modules/moment/min/moment.min.js'
     routes: routeData
+    myJs: uglify.minify(coffeescript.compile fr('my.coffee'), bare:true).code
   mkdirp.sync "#{__dirname}/dist"
   fs.writeFileSync "#{__dirname}/dist/index.html", html

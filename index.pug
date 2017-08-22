@@ -10,61 +10,7 @@ html
     script !{momentJs}
     script.
       var routes = !{JSON.stringify(routes)};
-
-      function secondsToString(v) {
-        var m = moment.duration(v, 'seconds');
-        var s = '';
-        if (m.hours() > 0) {
-          s += m.hours() + 'h ';
-        }
-        s += m.minutes() + 'm';
-        return s;
-      }
-
-      function chartInit(id, index) {
-        var ctx = document.getElementById(id).getContext('2d');
-        var r = routes[index];
-        var myChart = new Chart(ctx, {
-          type: 'line',
-          data: {
-            labels: r.labels,
-            datasets: [{
-              data: r.data
-            }],
-          },
-          options: {
-            responsive: true,
-            legend: false,
-            tooltips: {
-              callbacks: {
-                label: function(tip) {
-                  return secondsToString(tip.yLabel);
-                }
-              }
-            },
-            scales: {
-              yAxes: [{
-                ticks: {
-                  callback: function(v) {
-                    return secondsToString(v);
-                  }
-                }
-              }],
-              xAxes: [{
-                gridLines: {
-                  offsetGridLines: false
-                },
-                offset: true,
-                type: 'time',
-                time: {
-                  parser: "x",
-                  tooltipFormat: "ddd h:mma"
-                }
-              }]
-            }
-          }
-        });
-      }
+    script !{myJs}
   body
     mixin routeName(r)
       code= r.start
