@@ -9,6 +9,8 @@ html
     script !{chartJs}
     script !{momentJs}
     script.
+      var routes = !{JSON.stringify(routes)};
+
       function secondsToString(v) {
         var m = moment.duration(v, 'seconds');
         var s = '';
@@ -17,6 +19,51 @@ html
         }
         s += m.minutes() + 'm';
         return s;
+      }
+
+      function chartInit(id, index) {
+        var ctx = document.getElementById(id).getContext('2d');
+        var r = routes[index];
+        var myChart = new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels: r.labels,
+            datasets: [{
+              data: r.data
+            }],
+          },
+          options: {
+            responsive: true,
+            legend: false,
+            tooltips: {
+              callbacks: {
+                label: function(tip) {
+                  return secondsToString(tip.yLabel);
+                }
+              }
+            },
+            scales: {
+              yAxes: [{
+                ticks: {
+                  callback: function(v) {
+                    return secondsToString(v);
+                  }
+                }
+              }],
+              xAxes: [{
+                gridLines: {
+                  offsetGridLines: false
+                },
+                offset: true,
+                type: 'time',
+                time: {
+                  parser: "x",
+                  tooltipFormat: "ddd h:mma"
+                }
+              }]
+            }
+          }
+        });
       }
   body
     mixin routeName(r)
@@ -35,55 +82,14 @@ html
               a(href='#'+r.id)
                 +routeName(r)
       .row
-        each r in routes
+        each r, index in routes
           .route.col-lg-3.col-sm-6
             h3
               +routeName(r)
             .graph
               canvas(id=r.id)
               script.
-                var ctx = document.getElementById("#{r.id}").getContext('2d');
-                var r = !{JSON.stringify(r, null, '  ')};
-                var myChart = new Chart(ctx, {
-                  type: 'line',
-                  data: {
-                    labels: r.labels,
-                    datasets: [{
-                      data: r.data
-                    }],
-                  },
-                  options: {
-                    responsive: true,
-                    legend: false,
-                    tooltips: {
-                      callbacks: {
-                        label: function(tip) {
-                          return secondsToString(tip.yLabel);
-                        }
-                      }
-                    },
-                    scales: {
-                      yAxes: [{
-                        ticks: {
-                          callback: function(v) {
-                            return secondsToString(v);
-                          }
-                        }
-                      }],
-                      xAxes: [{
-                        gridLines: {
-                          offsetGridLines: false
-                        },
-                        offset: true,
-                        type: 'time',
-                        time: {
-                          parser: "x",
-                          tooltipFormat: "ddd h:mma"
-                        }
-                      }]
-                    }
-                  }
-                });
+                chartInit("#{r.id}", #{index});
             table.table.table-striped.table-condensed
               thead
                 tr
