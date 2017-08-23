@@ -6,6 +6,15 @@ html
     meta(name="viewport" content="width=device-width, initial-scale=1")
     title Trip Track
     style !{bootstrap}
+    style.
+      .github-logo {
+        background-image: url("data:image/svg+xml;base64,#{github.svg}");
+        background-size: cover;
+        width: #{github.w}px;
+        height: #{github.h}px;
+        display: inline-block;
+        /**/
+      }
   body
     mixin routeName(r)
       code= r.start
@@ -39,6 +48,9 @@ html
                   tr
                     td #{t.time}
                     td #{t.duration}
+      .row
+        a(href="https://github.com/brewingcode/trip-track", title="View on GitHub")
+          .github-logo
 
     script !{chartJs}
     script !{momentJs}

@@ -7,6 +7,7 @@ coffeescript = require 'coffee-script'
 uglify = require 'uglify-js'
 argv = require('yargs').argv
 yaml = require 'js-yaml'
+{ sprintf } = require 'sprintf-js'
 
 gapi = null
 { log } = log: -> 0
@@ -75,5 +76,9 @@ fs.readFileAsync("#{__dirname}/../config/api-key", 'utf8').then (contents) ->
     momentJs: fr 'node_modules/moment/min/moment.min.js'
     routes: routeData
     myJs: uglify.minify(coffeescript.compile fr('src/client.coffee'), bare:true).code
+    github:
+      svg: new Buffer(fr 'src/github-icon.svg').toString('base64')
+      w: sprintf "%0.1f", 256/5
+      h: sprintf "%0.1f", 250/5
   mkdirp.sync "#{__dirname}/../dist"
   fs.writeFileSync "#{__dirname}/../dist/#{argv.config}.html", html
