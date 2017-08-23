@@ -1,9 +1,13 @@
 secondsToString = (v) ->
   m = moment.duration(v, 'seconds')
   s = ''
+  if m.days() > 0
+    s += m.days() + 'd '
   if m.hours() > 0
     s += m.hours() + 'h '
-  s += m.minutes() + 'm'
+  if m.days() is 0
+    s += m.minutes() + 'm'
+  s
 
 chartInit = (id, index) ->
   ctx = document.getElementById(id).getContext('2d')
