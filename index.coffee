@@ -29,7 +29,7 @@ travelTime = ([start, end]) ->
     mkdirp.sync dir
     fs.writeFileAsync "#{dir}/#{now}.json", JSON.stringify t
 
-fs.readFileAsync("#{__dirname}/api-key", 'utf8').then (contents) ->
+fs.readFileAsync("#{__dirname}/config/api-key", 'utf8').then (contents) ->
   [ _, apiKey ] = contents.match /GOOGLE_MAPS_API_KEY=(\S+)/
   gapi = require('@google/maps').createClient key: apiKey
 .then ->
