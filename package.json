@@ -4,7 +4,7 @@
   "description": "Periodically query the Google Directions API",
   "main": "src/index.coffee",
   "scripts": {
-    "start": "nodemon -e pug,coffee --exec 'coffee src/index.coffee --offline'",
+    "start": "nodemon -e pug,coffee src/index.coffee --offline",
     "build": "coffee src/index.coffee"
   },
   "keywords": [],

@@ -12,7 +12,7 @@ gapi = null
 { log } = log: -> 0
 fr = (filename) -> fs.readFileSync "#{__dirname}/../#{filename}", 'utf8'
 
-argv.config = "index" unless argv.config
+argv.config = argv.config or process.env.TRIP_TRACK or 'index'
 routes = yaml.safeLoad fr("config/#{argv.config}.yml")
 
 travelTime = ([start, end]) ->
