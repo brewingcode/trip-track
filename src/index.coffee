@@ -12,8 +12,8 @@ gapi = null
 { log } = log: -> 0
 fr = (filename) -> fs.readFileSync "#{__dirname}/../#{filename}", 'utf8'
 
-argv.config = "#{__dirname}/../config/example.yml" unless argv.config
-routes = yaml.safeLoad fs.readFileSync argv.config, 'utf8'
+argv.config = "index" unless argv.config
+routes = yaml.safeLoad fr("config/#{argv.config}.yml")
 
 travelTime = ([start, end]) ->
   return if argv.offline
@@ -76,4 +76,4 @@ fs.readFileAsync("#{__dirname}/../config/api-key", 'utf8').then (contents) ->
     routes: routeData
     myJs: uglify.minify(coffeescript.compile fr('src/client.coffee'), bare:true).code
   mkdirp.sync "#{__dirname}/../dist"
-  fs.writeFileSync "#{__dirname}/../dist/index.html", html
+  fs.writeFileSync "#{__dirname}/../dist/#{argv.config}.html", html
