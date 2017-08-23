@@ -17,6 +17,7 @@ routes = yaml.safeLoad fs.readFileSync argv.config, 'utf8'
 
 travelTime = ([start, end]) ->
   return if argv.offline
+  log "travelTime(#{start}, #{end})"
   now = moment().unix()
   pr.promisify(gapi.directions)
     origin: start
@@ -27,15 +28,19 @@ travelTime = ([start, end]) ->
     # returns a {value:15432, text:"4 hours 17 mins"}
     t = response.json
     dir = "#{__dirname}/../data/#{start}--#{end}"
+    log 'writing google response to file'
     mkdirp.sync dir
     fs.writeFileAsync "#{dir}/#{now}.json", JSON.stringify t
 
 fs.readFileAsync("#{__dirname}/../config/api-key", 'utf8').then (contents) ->
+  log 'api key loaded'
   [ _, apiKey ] = contents.match /GOOGLE_MAPS_API_KEY=(\S+)/
   gapi = require('@google/maps').createClient key: apiKey
 .then ->
+  log 'querying all routes'
   pr.each routes, travelTime
 .then ->
+  log 'querying finished, building routes'
   routeData = []
 
   routes.forEach ([start, end]) ->
