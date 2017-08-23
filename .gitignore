@@ -2,3 +2,5 @@ node_modules
 api-key
 data
 dist
+config/*
+!config/example.json
