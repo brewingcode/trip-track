@@ -9,12 +9,10 @@ argv = require('yargs').argv
 
 gapi = null
 { log } = log: -> 0
+fr = (filename) -> fs.readFileSync "#{__dirname}/#{filename}", 'utf8'
 
-routes = [
-]
-
-fr = (filename) ->
-  fs.readFileSync "#{__dirname}/#{filename}", 'utf8'
+argv.config = "#{__dirname}/config/example.json" unless argv.config
+routes = JSON.parse fs.readFileSync argv.config, 'utf8'
 
 travelTime = ([start, end]) ->
   return if argv.offline
