@@ -6,11 +6,6 @@ html
     meta(name="viewport" content="width=device-width, initial-scale=1")
     title Trip Track
     style !{bootstrap}
-    script !{chartJs}
-    script !{momentJs}
-    script.
-      var routes = !{JSON.stringify(routes)};
-    script !{myJs}
   body
     mixin routeName(r)
       code= r.start
@@ -34,8 +29,6 @@ html
               +routeName(r)
             .graph
               canvas(id=r.id)
-              script.
-                chartInit("#{r.id}", #{index});
             table.table.table-striped.table-condensed
               thead
                 tr
@@ -46,3 +39,13 @@ html
                   tr
                     td #{t.time}
                     td #{t.duration}
+
+    script !{chartJs}
+    script !{momentJs}
+    script.
+      var routes = !{JSON.stringify(routes)};
+    script !{myJs}
+    script.
+      routes.forEach(function(r,i) {
+        chartInit(r.id, i);
+      });
