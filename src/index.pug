@@ -15,6 +15,18 @@ html
         display: inline-block;
         /**/
       }
+      .routes {
+        display: flex;
+        justify-content: center;
+        flex-flow: row wrap;
+      }
+      .route {
+        flex-grow: 1;
+      }
+      .route-heading {
+        text-align: center;
+        white-space: pre;
+      }
   body
     mixin routeName(r)
       code= r.start
@@ -25,16 +37,17 @@ html
       code= r.end
 
     #main.container-fluid
-      .row
-        ul
+      .row.text-center
+        h1 Trip Track
+        ul.list-unstyled
           each r in routes
             li
               a(href='#'+r.id)
                 +routeName(r)
-      .row
+      .row.routes
         each r, index in routes
           .route.col-lg-3.col-sm-6
-            h3
+            h3.route-heading
               +routeName(r)
             .graph
               canvas(id=r.id)
@@ -48,7 +61,7 @@ html
                   tr
                     td #{t.time}
                     td #{t.duration}
-      .row
+      .row.text-center
         a(href="https://github.com/brewingcode/trip-track", title="View on GitHub")
           .github-logo
 
