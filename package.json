@@ -2,10 +2,10 @@
   "name": "trip-track",
   "version": "1.0.0",
   "description": "",
-  "main": "index.coffee",
+  "main": "src/index.coffee",
   "scripts": {
-    "start": "nodemon -e pug,coffee --exec 'coffee index.coffee --offline'",
-    "build": "coffee index.coffee"
+    "start": "nodemon -e pug,coffee --exec 'coffee src/index.coffee --offline'",
+    "build": "coffee src/index.coffee"
   },
   "keywords": [],
   "author": "",
