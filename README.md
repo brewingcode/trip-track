@@ -13,4 +13,4 @@ npm start
 npm run build
 ```
 
-Use the [example config file](config/example.yml) as a starting point.
+Use the [example config file](config/index.yml) as a starting point.
