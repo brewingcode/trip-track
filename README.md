@@ -3,6 +3,8 @@
 Periodically query the Google Directions API for certain routes, and then
 show the estimated duration over the past 24 hours as a list and a graph.
 
+https://www.brewingcode.net/trip-track/
+
 Use `cron` to do the "periodically" part.
 
 ```
