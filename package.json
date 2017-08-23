@@ -1,7 +1,7 @@
 {
   "name": "trip-track",
   "version": "1.0.0",
-  "description": "",
+  "description": "Periodically query the Google Directions API",
   "main": "src/index.coffee",
   "scripts": {
     "start": "nodemon -e pug,coffee --exec 'coffee src/index.coffee --offline'",
