@@ -14,6 +14,7 @@
     "@google/maps": "^0.4.3",
     "bluebird": "^3.5.0",
     "coffee-script": "^1.12.7",
+    "js-yaml": "^3.9.1",
     "mkdirp": "^0.5.1",
     "moment": "^2.18.1",
     "nodemon": "^1.11.0",

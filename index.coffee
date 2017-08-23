@@ -6,13 +6,14 @@ pug = require 'pug'
 coffeescript = require 'coffee-script'
 uglify = require 'uglify-js'
 argv = require('yargs').argv
+yaml = require 'js-yaml'
 
 gapi = null
 { log } = log: -> 0
 fr = (filename) -> fs.readFileSync "#{__dirname}/#{filename}", 'utf8'
 
-argv.config = "#{__dirname}/config/example.json" unless argv.config
-routes = JSON.parse fs.readFileSync argv.config, 'utf8'
+argv.config = "#{__dirname}/config/example.yml" unless argv.config
+routes = yaml.safeLoad fs.readFileSync argv.config, 'utf8'
 
 travelTime = ([start, end]) ->
   return if argv.offline
