@@ -3,3 +3,4 @@ data
 dist
 config/*
 !config/index.yml
+src/routes.json

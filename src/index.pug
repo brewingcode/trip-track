@@ -1,76 +1,54 @@
-doctype html
-html
-  head
-    meta(charset="utf-8")
-    meta(http-equiv="X-UA-Compatible", content="IE=edge")
-    meta(name="viewport" content="width=device-width, initial-scale=1")
-    title Trip Track
-    style !{bootstrap}
-    style.
-      .github-logo {
-        background-image: url("data:image/svg+xml;base64,#{github.svg}");
-        background-size: cover;
-        width: #{github.w}px;
-        height: #{github.h}px;
-        display: inline-block;
-        /**/
-      }
-      .routes {
-        display: flex;
-        justify-content: center;
-        flex-flow: row wrap;
-      }
-      .route {
-        flex-grow: 1;
-      }
-      .route-heading {
-        text-align: center;
-        white-space: pre;
-      }
-  body
-    mixin routeName(r)
-      code= r.start
-      span
-        |
-        | to
-        |
-      code= r.end
+extends ../node_modules/static-page/src/_base
 
-    #main.container-fluid
-      .row.text-center
-        h1 Trip Track
-        ul.list-unstyled
-          each r in routes
-            li
-              a(href='#'+r.id)
-                +routeName(r)
-      .row.routes
-        each r, index in routes
-          .route.col-lg-3.col-sm-6
-            h3.route-heading
+append head
+  title Trip Track
+  style !{css['bootstrap.min']}
+  style !{styl.main}
+
+append body
+  mixin routeName(r)
+    code= r.start
+    span.
+
+      to
+
+    code= r.end
+
+  #main.container-fluid
+    .row.text-center
+      h1 Trip Track
+      ul.list-unstyled
+        each r in json.routes
+          li
+            a(href='#'+r.id)
               +routeName(r)
-            .graph
-              canvas(id=r.id)
-            table.table.table-striped.table-condensed
-              thead
+    .row.routes
+      each r, index in json.routes
+        .route.col-lg-3.col-sm-6
+          h3.route-heading
+            +routeName(r)
+          .graph
+            canvas(id=r.id)
+          table.table.table-striped.table-condensed
+            thead
+              tr
+                th Time of day
+                th Duration
+            tbody
+              each t in r.times
                 tr
-                  th Time of day
-                  th Duration
-              tbody
-                each t in r.times
-                  tr
-                    td #{t.time}
-                    td #{t.duration}
-      .row.text-center
-        a(href="https://github.com/brewingcode/trip-track", title="View on GitHub")
-          .github-logo
+                  td #{t.time}
+                  td #{t.duration}
+    .row.text-center
+      a(href="https://github.com/brewingcode/trip-track", title="View on GitHub")
+        .github-logo
 
-    script !{chartJs}
-    script !{momentJs}
-    script.
-      var routes = !{JSON.stringify(routes)};
-    script !{myJs}
-    script.
-      routes.forEach(function(r,i) {
-        chartInit(r.id, i);
-      });
+  script !{js['Chart.bundle.min']}
+  script !{js.moment}
+  script.
+    var routes = !{JSON.stringify(json.routes)};
+  script !{coffee.client}
+  script.
+    routes.forEach(function(r,i) {
+      chartInit(r.id, i);
+    });

@@ -2,12 +2,9 @@ moment = require 'moment'
 pr = require 'bluebird'
 fs = pr.promisifyAll require 'fs'
 mkdirp = require 'mkdirp'
-pug = require 'pug'
-coffeescript = require 'coffee-script'
-uglify = require 'uglify-js'
 argv = require('yargs').argv
 yaml = require 'js-yaml'
-{ sprintf } = require 'sprintf-js'
+staticPage = require 'static-page'
 
 gapi = null
 { log } = log: -> 0
@@ -70,15 +67,11 @@ fs.readFileAsync("#{__dirname}/../config/api-key", 'utf8').then (contents) ->
 
     routeData.push route
 
-  html = pug.render fr('src/index.pug'),
-    bootstrap: fr 'src/bootstrap.min.css'
-    chartJs: fr 'src/Chart.bundle.min.js'
-    momentJs: fr 'node_modules/moment/min/moment.min.js'
-    routes: routeData
-    myJs: uglify.minify(coffeescript.compile fr('src/client.coffee'), bare:true).code
-    github:
-      svg: new Buffer(fr 'src/github-icon.svg').toString('base64')
-      w: sprintf "%0.1f", 256/5
-      h: sprintf "%0.1f", 250/5
-  mkdirp.sync "#{__dirname}/../dist"
-  fs.writeFileSync "#{__dirname}/../dist/#{argv.config}.html", html
+  fs.writeFileAsync "#{__dirname}/../src/routes.json", JSON.stringify(routeData)
+.then ->
+  staticPage.crawl "#{__dirname}/../node_modules/static-page/src", false
+.then ->
+  staticPage.dist = "/tmp"
+  staticPage.crawl "#{__dirname}/../src", true
+.then ->
+  fs.renameSync "/tmp/index.html", "#{__dirname}/../dist/#{argv.config}.html",
