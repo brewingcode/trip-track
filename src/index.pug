@@ -2,8 +2,8 @@ extends ../node_modules/static-page/src/_base
 
 append head
   title Trip Track
-  style !{css['bootstrap.min']}
-  style !{styl.main}
+  :inject(file="bootstrap.min.css")
+  :inject(file="main.styl")
 
 append body
   mixin routeName(r)
@@ -18,12 +18,12 @@ append body
     .row.text-center
       h1 Trip Track
       ul.list-unstyled
-        each r in json.routes
+        each r in src["routes.json"]
           li
             a(href='#'+r.id)
               +routeName(r)
     .row.routes
-      each r, index in json.routes
+      each r, index in src["routes.json"]
         .route.col-lg-3.col-sm-6
           h3.route-heading
             +routeName(r)
@@ -41,14 +41,12 @@ append body
                   td #{t.duration}
     .row.text-center
       a(href="https://github.com/brewingcode/trip-track", title="View on GitHub")
-        span !{svg.github}
+        :inject(file="github.svg")
 
-  script !{js['Chart.bundle.min']}
-  script !{js.moment}
+  :inject(file="Chart.bundle.min.js")
+  :inject(file="moment.js")
   script.
-    var routes = !{JSON.stringify(json.routes)};
-  script !{coffee.client}
-  script.
-    routes.forEach(function(r,i) {
-      chartInit(r.id, i);
-    });
+    var routes = !{JSON.stringify(src['routes.json'])}
+  :inject(file="client.coffee")
+  :inject(ext="coffee")
+    routes.forEach (r,i) -> chartInit r.id, i
