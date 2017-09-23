@@ -17,8 +17,8 @@
     "mkdirp": "^0.5.1",
     "moment": "^2.18.1",
     "nodemon": "^1.11.0",
+    "pug-pack": "^1.0.1",
     "sprintf-js": "^1.1.1",
-    "static-page": "git+https://github.com/brewingcode/static-page.git",
     "yargs": "^8.0.2"
   }
 }
