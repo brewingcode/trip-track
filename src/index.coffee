@@ -4,7 +4,7 @@ fs = pr.promisifyAll require 'fs'
 mkdirp = require 'mkdirp'
 argv = require('yargs').argv
 yaml = require 'js-yaml'
-staticPage = require 'static-page'
+staticPage = require 'pug-pack'
 
 gapi = null
 { log } = log: -> 0
@@ -69,7 +69,7 @@ fs.readFileAsync("#{__dirname}/../config/api-key", 'utf8').then (contents) ->
 
   fs.writeFileAsync "#{__dirname}/../src/routes.json", JSON.stringify(routeData)
 .then ->
-  staticPage.crawl "#{__dirname}/../node_modules/static-page/src", false
+  staticPage.self()
 .then ->
   staticPage.dist = "/tmp"
   staticPage.crawl "#{__dirname}/../src", true

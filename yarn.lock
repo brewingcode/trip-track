@@ -428,6 +428,19 @@ css-parse@1.7.x:
   version "1.7.0"
   resolved "https://registry.yarnpkg.com/css-parse/-/css-parse-1.7.0.tgz#321f6cf73782a6ff751111390fc05e2c657d8c9b"
 
+css-tree@1.0.0-alpha23:
+  version "1.0.0-alpha23"
+  resolved "https://registry.yarnpkg.com/css-tree/-/css-tree-1.0.0-alpha23.tgz#5129518def61e99931d9a3397c3d6758af2ff0c5"
+  dependencies:
+    mdn-data "^1.0.0"
+    source-map "^0.5.3"
+
+csso@^3.2.0:
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/csso/-/csso-3.2.0.tgz#b290b9581551904aad45bca8988af17ca0711235"
+  dependencies:
+    css-tree "1.0.0-alpha23"
+
 csso@~2.3.1:
   version "2.3.2"
   resolved "https://registry.yarnpkg.com/csso/-/csso-2.3.2.tgz#ddd52c587033f49e94b71fc55569f252e8ff5f85"
@@ -1235,6 +1248,10 @@ map-stream@~0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/map-stream/-/map-stream-0.1.0.tgz#e56aa94c4c8055a16404a0674b78f215f7c8e194"
 
+mdn-data@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/mdn-data/-/mdn-data-1.0.0.tgz#a69d9da76847b4d5834c1465ea25c0653a1fbf66"
+
 mem@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/mem/-/mem-1.1.0.tgz#5edd52b485ca1d900fe64895505399a0dfa45f76"
@@ -1613,6 +1630,24 @@ pug-load@^2.0.9:
     object-assign "^4.1.0"
     pug-walk "^1.1.5"
 
+pug-pack@^1.1.6:
+  version "1.1.6"
+  resolved "https://registry.yarnpkg.com/pug-pack/-/pug-pack-1.1.6.tgz#2623362a59f45218a4c20ee0c007a06d324d27dc"
+  dependencies:
+    bluebird "^3.5.0"
+    coffee-script "^1.12.7"
+    csso "^3.2.0"
+    html-minifier "^3.5.5"
+    js-yaml "^3.10.0"
+    minimist "^1.2.0"
+    mkdirp "^0.5.1"
+    nodemon "^1.12.1"
+    pug "^2.0.0-rc.3"
+    shell-quote "^1.6.1"
+    stylus "^0.54.5"
+    svgo "^0.7.2"
+    uglify-js "^3.0.28"
+
 pug-parser@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/pug-parser/-/pug-parser-4.0.0.tgz#c9f52322e4eabe4bf5beeba64ed18373bb627801"
@@ -1922,24 +1957,6 @@ sshpk@^1.7.0:
     jsbn "~0.1.0"
     tweetnacl "~0.14.0"
 
-"static-page@git+ssh://alexgit:alex/static-page.git":
-  version "1.0.0"
-  resolved "git+ssh://alexgit:alex/static-page.git#eb3dd02cc5c040fed88841291ba4a8fc9e955102"
-  dependencies:
-    bluebird "^3.5.0"
-    coffee-script "^1.12.7"
-    html-minifier "^3.5.5"
-    js-yaml "^3.10.0"
-    minimist "^1.2.0"
-    mkdirp "^0.5.1"
-    nodemon "^1.12.1"
-    pug "^2.0.0-rc.3"
-    shell-quote "^1.6.1"
-    stylus "^0.54.5"
-    svgo "^0.7.2"
-    uglify-js "^3.0.28"
-    uglifycss "^0.0.27"
-
 stream-combiner@~0.0.4:
   version "0.0.4"
   resolved "https://registry.yarnpkg.com/stream-combiner/-/stream-combiner-0.0.4.tgz#4d5e433c185261dde623ca3f44c586bcf5c4ad14"
@@ -2134,10 +2151,6 @@ uglify-js@^2.6.1:
 uglify-to-browserify@~1.0.0:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/uglify-to-browserify/-/uglify-to-browserify-1.0.2.tgz#6e0924d6bda6b5afe349e39a6d632850a0f882b7"
-
-uglifycss@^0.0.27:
-  version "0.0.27"
-  resolved "https://registry.yarnpkg.com/uglifycss/-/uglifycss-0.0.27.tgz#53553b8115de26dce57b42ba0b34e88dd80d0cde"
 
 uid-number@^0.0.6:
   version "0.0.6"
